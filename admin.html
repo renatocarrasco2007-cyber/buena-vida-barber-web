@@ -195,10 +195,6 @@
     renderAll();
   }
 
-  if (sessionStorage.getItem(SESSION_KEY) === 'ok') {
-    showDashboard();
-  }
-
   loginBtn.addEventListener('click', attemptLogin);
   passInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
 
@@ -234,6 +230,10 @@
   });
   filterFecha.addEventListener('change', renderAll);
   filterEstado.addEventListener('change', renderAll);
+
+  if (sessionStorage.getItem(SESSION_KEY) === 'ok') {
+    showDashboard();
+  }
 
   function renderAll(){
     const all = getReservas();
