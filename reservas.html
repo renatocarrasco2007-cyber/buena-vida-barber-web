@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservar hora — Buena Vida Barber Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c0b; --bg-alt:#111412; --card:#15201a; --card-2:#0f1512;
+    --border:rgba(255,255,255,0.08); --white:#f4f7f5; --gray:#9aa39d; --gray-dim:#5f6b64;
+    --green:#2fe37a; --green-2:#17a856; --green-glow:rgba(47,227,122,0.35);
+    --red:#ff5a5a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  h1,h2,.display{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:0.5px;text-transform:uppercase;line-height:1.05;}
+  a{color:var(--green);text-decoration:none;}
+  .noise-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(circle at 15% 10%, rgba(47,227,122,0.10), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(47,227,122,0.08), transparent 45%);}
+  .topbar{position:relative;z-index:2;padding:22px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+  .logo{font-family:'Anton',sans-serif;font-size:1.1rem;letter-spacing:0.5px;display:flex;flex-direction:column;line-height:0.95;}
+  .logo span:last-child{color:var(--green);font-size:0.6rem;letter-spacing:3px;margin-top:2px;}
+  .back-link{font-size:0.85rem;font-weight:600;color:var(--gray);}
+  .back-link:hover{color:var(--white);}
+
+  .wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:50px 24px 90px;}
+  .eyebrow{color:var(--green);font-weight:700;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:block;}
+  .wrap h1{font-size:clamp(1.8rem,5vw,2.6rem);margin-bottom:12px;}
+  .wrap > p.lead{color:var(--gray);margin-bottom:36px;font-size:0.98rem;}
+
+  form{background:var(--card-2);border:1px solid var(--border);border-radius:20px;padding:32px;}
+  .field{margin-bottom:20px;}
+  label{display:block;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--gray);margin-bottom:8px;}
+  input, select, textarea{
+    width:100%;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;
+    padding:13px 14px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.95rem;
+    transition:border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus{outline:none;border-color:var(--green);}
+  textarea{resize:vertical;min-height:70px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+  .slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .slot{
+    padding:9px 14px;border:1px solid var(--border);border-radius:10px;font-size:0.85rem;font-weight:600;
+    cursor:pointer;transition:all 0.2s;background:var(--bg-alt);
+  }
+  .slot:hover{border-color:var(--green);}
+  .slot.selected{background:var(--green);color:#06170d;border-color:transparent;}
+  .slot.taken{opacity:0.35;text-decoration:line-through;cursor:not-allowed;pointer-events:none;}
+  .slots-empty{color:var(--gray-dim);font-size:0.85rem;padding:8px 0;}
+
+  .submit-btn{
+    width:100%;padding:15px;border:none;border-radius:12px;background:var(--green);color:#06170d;
+    font-weight:800;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;margin-top:6px;
+  }
+  .submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px var(--green-glow);}
+  .submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none;}
+
+  .msg{padding:14px 16px;border-radius:12px;font-size:0.88rem;margin-bottom:20px;display:none;}
+  .msg.error{background:rgba(255,90,90,0.1);border:1px solid rgba(255,90,90,0.35);color:#ffb3b3;display:block;}
+
+  .success-box{
+    background:linear-gradient(160deg, rgba(47,227,122,0.14), var(--card-2));
+    border:1px solid rgba(47,227,122,0.4);border-radius:20px;padding:40px 32px;text-align:center;
+  }
+  .success-box .check{
+    width:60px;height:60px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;
+    margin:0 auto 20px;
+  }
+  .success-box h2{margin-bottom:10px;font-size:1.5rem;}
+  .success-box p{color:var(--gray);margin-bottom:6px;}
+  .success-detail{color:var(--white);font-weight:700;margin:18px 0;font-size:1rem;}
+  .hidden{display:none !important;}
+
+  .hint{color:var(--gray-dim);font-size:0.78rem;margin-top:24px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="noise-bg"></div>
+
+<div class="topbar">
+  <div class="logo"><span>BUENA VIDA</span><span>BARBER CLUB</span></div>
+  <a class="back-link" href="index.html">&larr; Volver al sitio</a>
+</div>
+
+<div class="wrap">
+  <span class="eyebrow">Reserva tu hora</span>
+  <h1>Agenda tu corte</h1>
+  <p class="lead">Elige servicio, fecha y hora. Te confirmamos por Instagram si hay algún cambio.</p>
+
+  <div id="msg" class="msg error"></div>
+
+  <form id="bookingForm">
+    <div class="field">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="+56 9 1234 5678" required>
+      </div>
+      <div class="field">
+        <label for="servicio">Servicio</label>
+        <select id="servicio" name="servicio" required>
+          <option value="">Selecciona…</option>
+          <option value="Corte de pelo ($12.000)">Corte de pelo — $12.000</option>
+          <option value="Afeitado de barba">Afeitado de barba</option>
+          <option value="Diseño de barba">Diseño de barba</option>
+          <option value="Corte moderno">Corte moderno</option>
+          <option value="Corte vintage">Corte vintage</option>
+          <option value="Tratamiento facial masculino">Tratamiento facial masculino</option>
+          <option value="Hidratación capilar">Hidratación capilar</option>
+          <option value="Masaje capilar">Masaje capilar</option>
+          <option value="Coloración">Coloración</option>
+          <option value="Diseño de cejas">Diseño de cejas</option>
+          <option value="Depilación facial">Depilación facial</option>
+          <option value="Corte para niños">Corte para niños</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" name="fecha" required>
+    </div>
+
+    <div class="field">
+      <label>Hora disponible</label>
+      <div id="slots" class="slots"><span class="slots-empty">Elige una fecha para ver horas disponibles.</span></div>
+      <input type="hidden" id="hora" name="hora" required>
+    </div>
+
+    <div class="field">
+      <label for="notas">Notas (opcional)</label>
+      <textarea id="notas" name="notas" placeholder="Ej: quiero el mismo fade de la última vez"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Confirmar reserva</button>
+  </form>
+
+  <div id="successBox" class="success-box hidden">
+    <div class="check">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9 17.5L20 6.5" stroke="#06170d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>¡Reserva confirmada!</h2>
+    <p>Te esperamos en Barros Arana 951, Concepción.</p>
+    <div class="success-detail" id="successDetail"></div>
+    <a href="reservas.html" class="back-link">Hacer otra reserva</a>
+  </div>
+
+  <p class="hint">Esta es una demo del sistema de reservas — los datos se guardan localmente en este navegador.</p>
+</div>
+
+<script>
+  const STORAGE_KEY = 'buenavida_reservas';
+  const SCHEDULE = {
+    0: null, // domingo cerrado
+    1: ['10:30','11:15','12:00','12:45','13:30','14:15','15:00','15:45','16:30','17:15'],
+    2: ['10:30','11:15','12:00','12:45','13:30','14:15','15:00','15:45','16:30','17:15'],
+    3: ['10:30','11:15','12:00','12:45','13:30','14:15','15:00','15:45','16:30','17:15'],
+    4: ['10:30','11:15','12:00','12:45','13:30','14:15','15:00','15:45','16:30','17:15'],
+    5: ['10:30','11:15','12:00','12:45','13:30','14:15','15:00','15:45','16:30','17:15'],
+    6: ['10:30','11:15','12:00','12:45'],
+  };
+
+  function getReservas(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveReserva(r){
+    const all = getReservas();
+    all.push(r);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+  }
+
+  const fechaInput = document.getElementById('fecha');
+  const slotsBox = document.getElementById('slots');
+  const horaInput = document.getElementById('hora');
+  const msgBox = document.getElementById('msg');
+
+  const today = new Date();
+  fechaInput.min = today.toISOString().split('T')[0];
+
+  fechaInput.addEventListener('change', renderSlots);
+
+  function renderSlots(){
+    horaInput.value = '';
+    slotsBox.innerHTML = '';
+    if (!fechaInput.value) {
+      slotsBox.innerHTML = '<span class="slots-empty">Elige una fecha para ver horas disponibles.</span>';
+      return;
+    }
+    const date = new Date(fechaInput.value + 'T00:00:00');
+    const day = date.getDay();
+    const slotsForDay = SCHEDULE[day];
+
+    if (!slotsForDay) {
+      slotsBox.innerHTML = '<span class="slots-empty">Cerrado ese día. Elige otra fecha (lun-sáb).</span>';
+      return;
+    }
+
+    const taken = getReservas()
+      .filter(r => r.fecha === fechaInput.value)
+      .map(r => r.hora);
+
+    slotsForDay.forEach(hora => {
+      const el = document.createElement('div');
+      el.className = 'slot' + (taken.includes(hora) ? ' taken' : '');
+      el.textContent = hora;
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        horaInput.value = hora;
+      });
+      slotsBox.appendChild(el);
+    });
+  }
+
+  document.getElementById('bookingForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    msgBox.style.display = 'none';
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const servicio = document.getElementById('servicio').value;
+    const fecha = fechaInput.value;
+    const hora = horaInput.value;
+    const notas = document.getElementById('notas').value.trim();
+
+    if (!nombre || !telefono || !servicio || !fecha || !hora) {
+      msgBox.textContent = 'Por favor completa todos los campos obligatorios, incluyendo la hora.';
+      msgBox.style.display = 'block';
+      return;
+    }
+
+    const taken = getReservas().some(r => r.fecha === fecha && r.hora === hora);
+    if (taken) {
+      msgBox.textContent = 'Esa hora se acaba de ocupar. Elige otra.';
+      msgBox.style.display = 'block';
+      renderSlots();
+      return;
+    }
+
+    const reserva = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      nombre, telefono, servicio, fecha, hora, notas,
+      estado: 'pendiente',
+      creada: new Date().toISOString(),
+    };
+    saveReserva(reserva);
+
+    document.getElementById('bookingForm').classList.add('hidden');
+    document.getElementById('successBox').classList.remove('hidden');
+    const fechaFmt = new Date(fecha + 'T00:00:00').toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.getElementById('successDetail').textContent = `${servicio} · ${fechaFmt} · ${hora}`;
+  });
+</script>
+
+</body>
+</html>

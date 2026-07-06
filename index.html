@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buena Vida Barber Club — Concepción</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c0b;
+    --bg-alt:#111412;
+    --card:#15201a;
+    --card-2:#0f1512;
+    --border:rgba(255,255,255,0.08);
+    --white:#f4f7f5;
+    --gray:#9aa39d;
+    --gray-dim:#5f6b64;
+    --green:#2fe37a;
+    --green-2:#17a856;
+    --green-glow:rgba(47,227,122,0.35);
+    --blue-verified:#3897f0;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--green);color:#04120a;}
+
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--green-2),var(--green));border-radius:10px;}
+
+  h1,h2,h3,.display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* background texture */
+  .noise-bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(47,227,122,0.10), transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(47,227,122,0.06), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(47,227,122,0.08), transparent 50%);
+  }
+
+  /* ============ NAV ============ */
+  nav{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:100;
+    padding:18px 0;
+    transition:all 0.35s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(10,12,11,0.75);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    padding:12px 0;
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:'Anton',sans-serif;
+    font-size:1.25rem;
+    letter-spacing:1px;
+    display:flex;
+    flex-direction:column;
+    line-height:0.95;
+  }
+  .logo span:last-child{color:var(--green);font-size:0.65rem;letter-spacing:3px;margin-top:2px;}
+  .nav-links{display:flex;gap:32px;font-size:0.85rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;}
+  .nav-links a{position:relative;color:var(--gray);transition:color 0.25s;}
+  .nav-links a:hover{color:var(--white);}
+  .nav-links a::after{
+    content:'';position:absolute;bottom:-6px;left:0;width:0;height:2px;background:var(--green);transition:width 0.25s;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--green);
+    color:#06170d;
+    padding:10px 20px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.8rem;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    transition:transform 0.25s, box-shadow 0.25s;
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--green-glow);}
+  .nav-toggle{display:none;}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:140px 24px 80px;
+    z-index:1;
+  }
+
+  .ig-card{
+    width:100%;
+    max-width:480px;
+    background:linear-gradient(180deg, var(--card), var(--card-2));
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:32px 28px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset;
+    position:relative;
+    overflow:hidden;
+  }
+  .ig-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:3px;
+    background:linear-gradient(90deg, transparent, var(--green), transparent);
+  }
+
+  .ig-top{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+
+  .avatar-ring{
+    width:84px;height:84px;
+    border-radius:50%;
+    padding:3px;
+    background:conic-gradient(from 0deg, var(--green), #7effc0, var(--green-2), var(--green));
+    animation:spin 6s linear infinite;
+    flex-shrink:0;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .avatar-ring img{
+    width:100%;height:100%;
+    border-radius:50%;
+    border:3px solid var(--card);
+    object-fit:cover;
+    background:#222;
+  }
+
+  .ig-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .ig-name{font-family:'Anton',sans-serif;font-size:1.15rem;letter-spacing:0.3px;}
+  .verified{
+    width:16px;height:16px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#5bc0ff,var(--blue-verified));
+    display:inline-flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 6px rgba(56,151,240,0.5);
+    flex-shrink:0;
+  }
+  .verified svg{width:9px;height:9px;}
+  .ig-handle{
+    color:var(--green);
+    font-size:0.85rem;
+    font-weight:600;
+  }
+  .ig-category{color:var(--gray);font-size:0.78rem;margin-top:2px;}
+
+  .ig-stats{
+    display:flex;
+    justify-content:space-between;
+    margin:22px 0 18px;
+    padding:16px 0;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .ig-stat{text-align:center;flex:1;}
+  .ig-stat b{display:block;font-family:'Anton',sans-serif;font-size:1.25rem;}
+  .ig-stat span{color:var(--gray);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;}
+
+  .ig-bio{font-size:0.9rem;color:#dfe6e2;line-height:1.5;margin-bottom:20px;}
+
+  .ig-actions{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+  .btn{
+    flex:1;
+    min-width:120px;
+    padding:12px 14px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:700;
+    font-size:0.82rem;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+    border:1px solid var(--border);
+  }
+  .btn-primary{background:var(--green);color:#06170d;border-color:transparent;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px var(--green-glow);}
+  .btn-ghost{background:rgba(255,255,255,0.03);color:var(--white);}
+  .btn-ghost:hover{background:rgba(255,255,255,0.08);}
+
+  .ig-mini-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:6px;
+  }
+  .ig-mini-grid img{
+    width:100%;aspect-ratio:1/1;
+    object-fit:cover;
+    border-radius:6px;
+    filter:saturate(1.05);
+    transition:transform 0.3s;
+  }
+  .ig-mini-grid img:hover{transform:scale(1.08);}
+
+  .hero-headline{
+    text-align:center;
+    margin-top:56px;
+    max-width:780px;
+  }
+  .hero-headline h1{
+    font-size:clamp(2.2rem,6vw,4rem);
+    margin-bottom:16px;
+  }
+  .hero-headline h1 .accent{color:var(--green);}
+  .hero-headline p{color:var(--gray);font-size:1.05rem;max-width:560px;margin:0 auto 26px;}
+
+  .community-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(47,227,122,0.08);
+    border:1px solid rgba(47,227,122,0.3);
+    padding:10px 22px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.9rem;
+  }
+  .community-pill b{font-family:'Anton',sans-serif;color:var(--green);font-size:1.1rem;}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .stagger > *{opacity:0;transform:translateY(30px);transition:opacity 0.6s ease, transform 0.6s ease;}
+  .stagger.in > *{opacity:1;transform:translateY(0);}
+  .stagger.in > *:nth-child(1){transition-delay:0.05s;}
+  .stagger.in > *:nth-child(2){transition-delay:0.1s;}
+  .stagger.in > *:nth-child(3){transition-delay:0.15s;}
+  .stagger.in > *:nth-child(4){transition-delay:0.2s;}
+  .stagger.in > *:nth-child(5){transition-delay:0.25s;}
+  .stagger.in > *:nth-child(6){transition-delay:0.3s;}
+  .stagger.in > *:nth-child(7){transition-delay:0.35s;}
+  .stagger.in > *:nth-child(8){transition-delay:0.4s;}
+  .stagger.in > *:nth-child(9){transition-delay:0.45s;}
+  .stagger.in > *:nth-child(10){transition-delay:0.5s;}
+  .stagger.in > *:nth-child(11){transition-delay:0.55s;}
+  .stagger.in > *:nth-child(12){transition-delay:0.6s;}
+
+  /* ============ SECTION GENERIC ============ */
+  section{position:relative;z-index:1;padding:110px 0;}
+  .eyebrow{
+    color:var(--green);
+    font-weight:700;
+    font-size:0.78rem;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:12px;
+    display:block;
+  }
+  .section-title{font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:18px;}
+  .section-lead{color:var(--gray);max-width:620px;font-size:1rem;line-height:1.6;margin-bottom:50px;}
+
+  /* ============ SOBRE ============ */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:60px;
+    align-items:center;
+  }
+  .about-text p{color:#d6ddd9;line-height:1.75;margin-bottom:20px;font-size:1rem;}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+  .badge{
+    padding:9px 16px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    font-size:0.82rem;
+    font-weight:600;
+    color:var(--white);
+    background:rgba(255,255,255,0.02);
+    transition:border-color 0.25s, color 0.25s;
+  }
+  .badge:hover{border-color:var(--green);color:var(--green);}
+
+  .about-photos{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  .about-photos img{
+    border-radius:16px;
+    object-fit:cover;
+    width:100%;
+    height:100%;
+    aspect-ratio:1/1;
+    transition:transform 0.4s;
+  }
+  .about-photos a:hover img{transform:scale(1.05);}
+  .about-photos a:nth-child(1){grid-row:span 2;}
+  .about-photos a:nth-child(1) img{aspect-ratio:1/2.08;}
+
+  /* ============ SERVICIOS ============ */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+  }
+  .service-card{
+    background:var(--card-2);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:26px 24px;
+    transition:transform 0.3s, border-color 0.3s, background 0.3s;
+  }
+  .service-card:hover{transform:translateY(-6px);border-color:var(--green);}
+  .service-card.featured{
+    background:linear-gradient(160deg, rgba(47,227,122,0.14), var(--card-2));
+    border-color:rgba(47,227,122,0.4);
+  }
+  .service-card h3{font-family:'Inter',sans-serif;font-weight:700;font-size:1.02rem;text-transform:none;margin-bottom:8px;letter-spacing:0;}
+  .service-price{color:var(--green);font-weight:800;font-size:1.3rem;font-family:'Anton',sans-serif;}
+  .service-note{color:var(--gray-dim);font-size:0.82rem;}
+
+  /* ============ GALERIA ============ */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+  .gallery-item{
+    position:relative;
+    border-radius:14px;
+    overflow:hidden;
+    aspect-ratio:1/1;
+  }
+  .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
+  .gallery-item:hover img{transform:scale(1.12);}
+  .gallery-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 40%, rgba(6,10,8,0.85));
+    display:flex;align-items:flex-end;
+    padding:14px;
+    opacity:0;
+    transition:opacity 0.3s;
+  }
+  .gallery-item:hover .gallery-overlay{opacity:1;}
+  .gallery-overlay span{font-size:0.78rem;font-weight:700;color:var(--green);}
+
+  /* ============ METRICAS (parallax) ============ */
+  .metrics-section{
+    background:linear-gradient(180deg, var(--bg-alt), var(--bg));
+    position:relative;
+    overflow:hidden;
+    padding:100px 0;
+  }
+  .metrics-bg{
+    position:absolute;
+    inset:-20% -10%;
+    background:radial-gradient(circle at 30% 30%, rgba(47,227,122,0.12), transparent 55%);
+    will-change:transform;
+    z-index:0;
+  }
+  .metrics-grid{
+    position:relative;z-index:1;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:30px;
+    text-align:center;
+  }
+  .metric b{
+    display:block;
+    font-family:'Anton',sans-serif;
+    font-size:clamp(2.2rem,5vw,3.2rem);
+    color:var(--green);
+  }
+  .metric span{color:var(--gray);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;}
+
+  /* ============ HORARIO / CONTACTO ============ */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+  }
+  .info-block{
+    background:var(--card-2);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:34px;
+  }
+  .info-block h3{font-family:'Inter',sans-serif;text-transform:none;font-weight:700;font-size:1.1rem;letter-spacing:0;margin-bottom:18px;}
+  .schedule-row{
+    display:flex;justify-content:space-between;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:0.9rem;
+  }
+  .schedule-row:last-child{border-bottom:none;}
+  .schedule-row span:last-child{color:var(--green);font-weight:600;}
+  .address-line{display:flex;gap:12px;align-items:flex-start;color:#d6ddd9;font-size:0.95rem;margin-bottom:14px;line-height:1.5;}
+
+  .social-links{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
+  .social-btn{
+    display:flex;align-items:center;gap:10px;
+    padding:12px 18px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    font-weight:700;
+    font-size:0.85rem;
+    transition:border-color 0.25s, transform 0.25s;
+  }
+  .social-btn:hover{border-color:var(--green);transform:translateY(-2px);}
+  .social-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+  .cta-final{
+    text-align:center;
+    margin-top:70px;
+    padding:50px 30px;
+    background:linear-gradient(135deg, rgba(47,227,122,0.12), transparent);
+    border:1px solid rgba(47,227,122,0.25);
+    border-radius:24px;
+  }
+  .cta-final h2{margin-bottom:16px;font-size:clamp(1.6rem,4vw,2.4rem);}
+  .cta-final p{color:var(--gray);margin-bottom:26px;}
+
+  footer{
+    padding:36px 0;
+    border-top:1px solid var(--border);
+    text-align:center;
+    color:var(--gray-dim);
+    font-size:0.82rem;
+  }
+  footer a{color:var(--green);font-weight:600;}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .about-grid,.contact-grid{grid-template-columns:1fr;gap:36px;}
+    .metrics-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:520px){
+    .ig-mini-grid{grid-template-columns:repeat(3,1fr);}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .ig-actions{flex-direction:column;}
+    .about-photos a:nth-child(1){grid-row:auto;}
+    .about-photos a:nth-child(1) img{aspect-ratio:1/1;}
+  }
+</style>
+</head>
+<body>
+
+<div class="noise-bg"></div>
+
+<nav id="nav">
+  <div class="container nav-inner">
+    <div class="logo"><span>BUENA VIDA</span><span>BARBER CLUB</span></div>
+    <div class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#galeria">Galería</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a class="nav-cta" href="reservas.html">Agendar</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="ig-card reveal">
+    <div class="ig-top">
+      <div class="avatar-ring">
+        <img src="assets/instagram/profile.jpg" alt="Foto de perfil de Buena Vida Barber Club">
+      </div>
+      <div>
+        <div class="ig-name-row">
+          <span class="ig-name">Buena Vida Barber Club</span>
+          <span class="verified" title="Cuenta verificada">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9 17.5L20 6.5" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <a class="ig-handle" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener">@buenavidabarberclub</a>
+        <div class="ig-category">Barber Shop · Concepción, Chile</div>
+      </div>
+    </div>
+
+    <div class="ig-stats">
+      <div class="ig-stat"><b>418</b><span>Posts</span></div>
+      <div class="ig-stat"><b>1.124</b><span>Seguidores</span></div>
+      <div class="ig-stat"><b>875</b><span>Seguidos</span></div>
+    </div>
+
+    <p class="ig-bio">Barros Arana 951 📍 Concepción 🇨🇱</p>
+
+    <div class="ig-actions">
+      <a class="btn btn-primary" href="reservas.html">Agendar hora</a>
+      <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
+      <a class="btn btn-ghost" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener">Seguir</a>
+    </div>
+
+    <div class="ig-mini-grid">
+      <img src="assets/instagram/post-1.jpg" alt="Post de Instagram">
+      <img src="assets/instagram/post-2.jpg" alt="Post de Instagram">
+      <img src="assets/instagram/post-3.jpg" alt="Post de Instagram">
+      <img src="assets/instagram/post-4.jpg" alt="Post de Instagram">
+      <img src="assets/instagram/post-5.jpg" alt="Post de Instagram">
+      <img src="assets/instagram/post-6.jpg" alt="Post de Instagram">
+    </div>
+  </div>
+
+  <div class="hero-headline reveal">
+    <h1>CORTES QUE<br><span class="accent">HABLAN POR TI</span></h1>
+    <p>Barbería en el corazón de Concepción. Fade, diseño de barba y estilo clásico con actitud urbana — agenda tu hora directo por Instagram.</p>
+    <div class="community-pill">
+      <b>2.782</b> personas siguen a Buena Vida entre Instagram y TikTok
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOBRE ================= -->
+<section id="sobre">
+  <div class="container about-grid">
+    <div class="about-text reveal">
+      <span class="eyebrow">Sobre nosotros</span>
+      <h2 class="section-title">Barbería de barrio,<br>estilo de verdad</h2>
+      <p>Buena Vida Barber Club es una barbería ubicada en Barros Arana 951, Concepción. Atendemos por agenda y por orden de llegada, con un estilo que mezcla lo clásico con la actitud urbana de la calle.</p>
+      <p>Cada corte se agenda directo por Instagram — ahí compartimos disponibilidad, resultados y el día a día del local.</p>
+      <div class="badges">
+        <span class="badge">Fade</span>
+        <span class="badge">Diseño de Barba</span>
+        <span class="badge">Cortes Clásicos</span>
+        <span class="badge">Cortes Modernos</span>
+        <span class="badge">Cortes Vintage</span>
+        <span class="badge">Corte Infantil</span>
+      </div>
+    </div>
+    <div class="about-photos stagger">
+      <a href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-7.jpg" alt="Trabajo real de Buena Vida Barber Club"></a>
+      <a href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-8.jpg" alt="Trabajo real de Buena Vida Barber Club"></a>
+      <a href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-9.jpg" alt="Trabajo real de Buena Vida Barber Club"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICIOS ================= -->
+<section id="servicios">
+  <div class="container">
+    <span class="eyebrow reveal">Servicios</span>
+    <h2 class="section-title reveal">Lo que hacemos</h2>
+    <p class="section-lead reveal">Servicios reales que ofrecemos en el local. Agenda directo por Instagram para confirmar disponibilidad.</p>
+    <div class="services-grid stagger">
+      <div class="service-card featured">
+        <h3>Corte de pelo</h3>
+        <div class="service-price">$12.000</div>
+        <p class="service-note">Precio confirmado</p>
+      </div>
+      <div class="service-card"><h3>Afeitado de barba</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Diseño de barba</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Corte moderno</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Corte vintage</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Tratamiento facial masculino</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Hidratación capilar</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Masaje capilar</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Coloración</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Diseño de cejas</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Depilación facial</h3><p class="service-note">Consulta disponibilidad</p></div>
+      <div class="service-card"><h3>Corte para niños</h3><p class="service-note">Consulta disponibilidad</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALERIA ================= -->
+<section id="galeria">
+  <div class="container">
+    <span class="eyebrow reveal">Galería</span>
+    <h2 class="section-title reveal">Directo desde Instagram</h2>
+    <p class="section-lead reveal">Trabajos reales publicados en @buenavidabarberclub.</p>
+    <div class="gallery-grid stagger">
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-1.jpg" alt="Post 1"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-2.jpg" alt="Post 2"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-3.jpg" alt="Post 3"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-4.jpg" alt="Post 4"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-5.jpg" alt="Post 5"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-6.jpg" alt="Post 6"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-10.jpg" alt="Post 7"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+      <a class="gallery-item" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener"><img src="assets/instagram/post-11.jpg" alt="Post 8"><div class="gallery-overlay"><span>Ver en Instagram</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METRICAS ================= -->
+<section class="metrics-section">
+  <div class="metrics-bg" id="parallaxBg"></div>
+  <div class="container">
+    <div class="metrics-grid stagger">
+      <div class="metric"><b data-count="2782">0</b><span>Comunidad total</span></div>
+      <div class="metric"><b data-count="1124">0</b><span>Seguidores IG</span></div>
+      <div class="metric"><b data-count="1658">0</b><span>Seguidores TikTok</span></div>
+      <div class="metric"><b data-count="418">0</b><span>Publicaciones</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACTO ================= -->
+<section id="contacto">
+  <div class="container">
+    <span class="eyebrow reveal">Contacto</span>
+    <h2 class="section-title reveal">Agenda tu hora</h2>
+    <p class="section-lead reveal">Escríbenos por Instagram o pásate directo al local en Barros Arana 951, Concepción.</p>
+
+    <div class="contact-grid">
+      <div class="info-block reveal">
+        <h3>Horario de atención</h3>
+        <div class="schedule-row"><span>Lunes – Viernes</span><span>10:30 – 18:00</span></div>
+        <div class="schedule-row"><span>Sábado</span><span>10:30 – 13:00</span></div>
+        <div class="schedule-row"><span>Domingo</span><span>Cerrado</span></div>
+        <div class="address-line" style="margin-top:20px;">
+          <span>📍</span>
+          <span>Barros Arana 951, Concepción, Bío Bío, Chile</span>
+        </div>
+      </div>
+
+      <div class="info-block reveal">
+        <h3>Redes sociales</h3>
+        <div class="social-links">
+          <a class="social-btn" href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+            Instagram
+          </a>
+          <a class="social-btn" href="https://www.tiktok.com/@buenavidabarberclub" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2.2 1.9 3.9 4 4.4v3.1c-1.5 0-2.9-.5-4-1.3v6.6c0 3.5-2.9 6.2-6.4 6.2S3.7 19.3 3.7 15.8s2.9-6.2 6.4-6.2c.4 0 .8 0 1.1.1v3.3c-.3-.1-.7-.2-1.1-.2-1.7 0-3 1.3-3 3s1.3 3 3 3 3.1-1.2 3.1-3V3h3.3z"/></svg>
+            TikTok
+          </a>
+        </div>
+        <p style="color:var(--gray-dim);font-size:0.82rem;margin-top:18px;">¿Tienes WhatsApp? Escríbenos por Instagram mientras lo activamos aquí.</p>
+      </div>
+    </div>
+
+    <div class="cta-final reveal">
+      <h2>¿Listo para tu próximo corte?</h2>
+      <p>Agenda por orden de llegada o mándanos un DM por Instagram.</p>
+      <a class="btn btn-primary" style="display:inline-block;flex:none;padding:16px 36px;" href="reservas.html">Agendar hora online</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="year"></span> Buena Vida Barber Club — Concepción, Chile · <a href="https://www.instagram.com/buenavidabarberclub/" target="_blank" rel="noopener">@buenavidabarberclub</a></p>
+  <p style="margin-top:8px;"><a href="admin.html" style="color:var(--gray-dim);">Acceso equipo</a></p>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal + stagger via Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+  // Counter animation
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        const duration = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * target).toLocaleString('es-CL');
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = target.toLocaleString('es-CL');
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+  // Parallax on metrics background
+  const parallaxBg = document.getElementById('parallaxBg');
+  const metricsSection = document.querySelector('.metrics-section');
+  window.addEventListener('scroll', () => {
+    if (!metricsSection) return;
+    const rect = metricsSection.getBoundingClientRect();
+    const offset = rect.top * 0.15;
+    parallaxBg.style.transform = `translateY(${offset}px)`;
+  });
+</script>
+
+</body>
+</html>
